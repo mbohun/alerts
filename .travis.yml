@@ -16,7 +16,9 @@ before_install:
 - source ~/.gvm/bin/gvm-init.sh
 - gvm install grails $GRAILS_VERSION || true
 
-before_script: mkdir -p ~/.grails; cp travis_grails_settings.groovy ~/.grails/settings.groovy; maven_repo="nectar-nexus-repo-snapshot"; grep 'app\.version' application.properties | grep -q "\-SNAPSHOT$"; if [ "$?" = "1" ]; then maven_repo="nectar-nexus-repo-release"; fi;
+before_script:
+- mkdir -p ~/.grails; cp travis_grails_settings.groovy ~/.grails/settings.groovy
+- maven_repo="nectar-nexus-repo-snapshot"; grep 'app\.version' application.properties | grep -q "\-SNAPSHOT"; if [ "$?" = "1" ]; then maven_repo="nectar-nexus-repo-release"; fi;
 
 script: grails clean && grails upgrade --non-interactive && grails refresh-dependencies --non-interactive && grails prod maven-deploy --repository=$maven_repo
 
